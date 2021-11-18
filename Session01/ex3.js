@@ -27,26 +27,29 @@ if(board[currPoint.x][currPoint.y] === 0){
     console.log(startPoint)
     part.push(new point(startPoint.x, startPoint.y))
 }
-
-for(let i = 0; i <= maxX; i++){
-    if( currPoint.x < 0 || currPoint.x >= maxX || currPoint.y < 0 || currPoint.y > maxY){
-        console.log("End find path" + currPoint.x + " " + currPoint.y);
-    }        
-    else {
-        for(let j = 0; j <= maxY; j++){
-            console.log(i + " " + j)
-            if(board[j][i+1] === 0){
-                
-                SetCurrentPoint(new point(i+ 1, j));
-                break;
+function FindPath(){
+    for(let i = 0; i <= maxX; i++){
+        if( currPoint.x < 0 || currPoint.x >= maxX || currPoint.y < 0 || currPoint.y > maxY){
+            console.log("End find path" + currPoint.x + " " + currPoint.y);
+        }        
+        else {
+            for(let j = 0; j <= maxY; j++){
+                console.log(i + " " + j)
+                if(board[j][i+1] === 0){
+                    
+                    SetCurrentPoint(new point(i+ 1, j));
+                    break;
+                }
             }
         }
+          
     }
-      
 }
+FindPath();
 console.log(part)
 
 function SetCurrentPoint(point){
+
     currPoint.x = point.x;
     currPoint.y = point.y;
     console.log("update point" + currPoint.x + " " + currPoint.y)
