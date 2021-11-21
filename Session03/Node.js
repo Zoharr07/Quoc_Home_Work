@@ -8,6 +8,7 @@ export class Node {
         this._children = [];
         this.initView();
         this.view.style.display = "";
+        this.view.style.position = "absolute";
     }
 
     get x() {
@@ -56,7 +57,7 @@ export class Node {
     }
 
     addChild(node){
-        this.children.push(node);
+        this._children.push(node);
         this.view.appendChild(node.view);
     }
     

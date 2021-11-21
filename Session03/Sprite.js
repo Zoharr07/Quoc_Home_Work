@@ -1,4 +1,4 @@
-import { Node } from "./Node";
+import { Node } from './Node.js';
 export class Sprite extends Node {
     initView(){
         this.view = document.createElement('img');

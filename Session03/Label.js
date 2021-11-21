@@ -1,4 +1,4 @@
-import { Node } from "./Node.is";
+import { Node } from './Node.js';
 export class Label extends Node {
     constructor(string) {
         super();
