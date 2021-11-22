@@ -2,13 +2,13 @@ export class Node {
     constructor(){
         this._x = 0;
         this._y = 0;
-        this._width = 0;
-        this._height = 0;
-        this._active = true;
+        this._width = 100;
+        this._height = 100;
         this._children = [];
         this.initView();
         this.view.style.display = "";
         this.view.style.position = "absolute";
+        this.view.style.borderRadius = "8px";
     }
 
     get x() {
@@ -43,17 +43,23 @@ export class Node {
         this.view.style.height = this._height + 'px';
     }
 
-    get active() {
-        return this._active;
-    }
-    set active(isActive) {
+    
+    active(isActive) {
         this._active = isActive;
         if(isActive) this.view.style.display = "";
+        else this.view.style.display = "none";
         
     }
 
     initView(){
         this.view = document.createElement('div');
+        this.setSize(this._width, this._height)
+        // this.view.style.backgroundSize = "contain";
+        this.view.style.backgroundRepeat = "no-repeat";
+    }
+    setBackGround(backGround){
+        this.view.style.backgroundImage = backGround;
+        this.view.style.backgroundSize = "contain";
     }
 
     addChild(node){

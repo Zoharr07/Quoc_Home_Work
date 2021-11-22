@@ -1,9 +1,9 @@
 import { Node } from './Node.js';
 export class Sprite extends Node {
-    initView(){
+    initView() {
         this.view = document.createElement('img');
     }
-    setBackGround(background){
-        this.view.src = background;
+    setImage(src){
+        this.view.src = src;
     }
 }

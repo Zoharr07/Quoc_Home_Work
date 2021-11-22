@@ -1,1 +1,0 @@
-let testCard = new Card();

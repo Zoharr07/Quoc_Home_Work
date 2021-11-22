@@ -5,6 +5,7 @@ export class Label extends Node {
         this._string = string || "";
         this.string = this._string;
         this.view.style.color = 'black';
+        this.setPosition(this.width/2 - 5, this.height/2 - 5)
     }
 
     get string() {
