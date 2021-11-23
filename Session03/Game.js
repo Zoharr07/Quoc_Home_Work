@@ -26,7 +26,7 @@ let offsetX = 20;
 let offsetY = 100;
 let count = 0;
 let scoreTotal = 10000;
-let cardRemain = colum*row;
+let cardRemain = colum * row;
 
 let cardWidth = 100;
 let cardHeight = 120;
@@ -44,37 +44,37 @@ let scoreLabel = new Label();
 scoreBoard.appendChild(scoreLabel.view);
 
 
-setScoreBox();   
+setScoreBox();
 updateScore(0);
-makeRandomListCard(10,2);
+makeRandomListCard(10, 2);
 instanceBoardGame();
 
 
-function setScoreBox(){
-    scoreBoard.style.width = cardHeight*2 + "px";
-    scoreBoard.style.height = cardWidth*(3/4) + "px";
+function setScoreBox() {
+    scoreBoard.style.width = cardHeight * 2 + "px";
+    scoreBoard.style.height = cardWidth * (3 / 4) + "px";
     scoreBoard.style.backgroundColor = "#ffbf00";
     scoreBoard.style.position = "absolute";
-    scoreBoard.style.left = (row* cardWidth - offsetX)/2 + "px"
-    scoreBoard.style.top = (colum* cardHeight - offsetX) + "px"
+    scoreBoard.style.left = (row * cardWidth - offsetX) / 2 + "px"
+    scoreBoard.style.top = (colum * cardHeight - offsetX) + "px"
     scoreBoard.style.borderRadius = "16px";
-    scoreLabel.setPosition(cardWidth*(2.5/4), cardHeight/5)
-    scoreLabel.setSize(250, 120)  
+    scoreLabel.setPosition(cardWidth * (2.5 / 4), cardHeight / 5)
+    scoreLabel.setSize(250, 120)
 }
 
-function instanceBoardGame(){
-    for(let i = 0; i < row; i++){
-        for(let j = 0; j < colum; j++){
+function instanceBoardGame() {
+    for (let i = 0; i < row; i++) {
+        for (let j = 0; j < colum; j++) {
             count++;
             let card = Card(count, cards[count - 1]);
-            card.setPosition(offsetX + j * (cardWidth + offsetX), offsetX + i* (cardHeight + offsetX))
+            card.setPosition(offsetX + j * (cardWidth + offsetX), offsetX + i * (cardHeight + offsetX))
             mainBG.appendChild(card.view);
         }
     }
 }
 
 function Card(index, value) {
-    let card = new Node();   
+    let card = new Node();
     card.setSize(cardWidth, cardHeight);
     card.setBackGround(imageURL[value]);
     card.view.id = "card" + index;
@@ -91,95 +91,95 @@ function Card(index, value) {
 }
 
 function addEvenListenerCard(card, cover, index, value) {
-    card.view.addEventListener('mousedown', function(){
+    card.view.addEventListener('mousedown', function () {
         if (!canClick) return;
         card.view.style.transform = "rotateY(180deg)";
-        setTimeout(function(){
-            if(cover.view.style.display != 'none') {
+        setTimeout(function () {
+            if (cover.view.style.display != 'none') {
                 cover.active(false)
                 if (firstValue === null) {
                     firstIndex = index;
                     firstValue = value;
                     return;
-                } 
-                canClick = false;   
+                }
+                canClick = false;
                 if (firstValue === value) {
                     cardRemain += -2;
-                    updateScore(1000);                
-                    setTimeout(function(){
-                        setActiveElement("card"+index, "none");
-                        setActiveElement("card"+firstIndex, "none");
+                    updateScore(1000);
+                    setTimeout(function () {
+                        setActiveElement("card" + index, "none");
+                        setActiveElement("card" + firstIndex, "none");
                         reset();
-                    },800);    
+                    }, 800);
                 } else {
                     updateScore(-500)
-                    setTimeout(function(){
-                        setActiveElement("cover"+index, "");
-                        setActiveElement("cover"+firstIndex, "");
+                    setTimeout(function () {
+                        setActiveElement("cover" + index, "");
+                        setActiveElement("cover" + firstIndex, "");
                         card.view.style.transform = "rotateY(360deg)";
-                        document.getElementById('card'+firstIndex).style.transform = "rotateY(360deg)";
+                        document.getElementById('card' + firstIndex).style.transform = "rotateY(360deg)";
                         reset();
-                    },900);
+                    }, 900);
                 }
             }
-            
-        },500);
+
+        }, 500);
     })
 }
 
-function reset(){
+function reset() {
     canClick = true;
     firstIndex = null;
     firstValue = null;
 }
 
-function setActiveElement(_target, _status){
+function setActiveElement(_target, _status) {
     document.getElementById(_target).style.display = _status;
 }
 
-function makeRandomListCard(number, numberRep){
-    for(let i = 0; i < number; i++){
-        for(let j = 0; j < numberRep; j++){
+function makeRandomListCard(number, numberRep) {
+    for (let i = 0; i < number; i++) {
+        for (let j = 0; j < numberRep; j++) {
             cards.push(i);
         }
     }
     let temp = [];
     let rand = shuffle(cards);
-    for(let i = 0; i< rand.length; i++) temp.push(cards[rand[i]]);
+    for (let i = 0; i < rand.length; i++) temp.push(cards[rand[i]]);
     cards = temp;
 }
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }  
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
     return array;
 }
 
-function updateScore(_value){
+function updateScore(_value) {
     _value ? scoreTotal += _value : 0;
     scoreLabel.view.innerHTML = "Score: " + scoreTotal;
     scoreLabel.view.style.fontSize = "x-large"
     checkWinLose(scoreTotal);
 }
 
-function checkWinLose(_score){
-    if(_score <= 0){
+function checkWinLose(_score) {
+    if (_score <= 0) {
         scoreTotal = 0;
         console.log("You Lose Game");
         confirm("You Lose Game")
         window.location.reload();
     }
-    if(cardRemain <= 0){
-        setTimeout(function(){
+    if (cardRemain <= 0) {
+        setTimeout(function () {
             confirm("You Win Game");
             window.location.reload();
-        },800);
+        }, 800);
     }
 }
 
