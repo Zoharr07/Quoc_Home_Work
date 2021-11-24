@@ -5,7 +5,8 @@ export class Label extends Node {
         this._string = string || "";
         this.string = this._string;
         this.element.style.color = 'black';
-        this.element.style.fontSize = "x-large"
+        this.element.style.fontSize = "x-large";
+        this.setSize(50, 50);
     }
 
     get string() {

@@ -1,11 +1,12 @@
 export class Node {
-    constructor(){
+    constructor() {
         this._x = 0;
         this._y = 0;
         this._width = 100;
         this._height = 100;
         this._children = [];
         this.element;
+        this._active = true;
         this.initElement();
     }
 
@@ -41,31 +42,35 @@ export class Node {
         this.element.style.height = this._height + 'px';
     }
 
-    active(isActive) {
+    getActive() {
+        return this._active;
+    }
+    setActive(isActive) {
         this._active = isActive;
-        if(isActive) this.element.style.display = "";
+        if (isActive) this.element.style.display = "";
         else this.element.style.display = "none";
     }
-    initElement(){
+    initElement() {
         this.element = document.createElement('div');
         this.setSize(this._width, this._height);
         this.element.style.backgroundRepeat = "no-repeat";
         this.element.style.display = "";
         this.element.style.position = "absolute";
-        this.element.style.borderRadius = "8px"; 
+        this.element.style.borderRadius = "8px";
+        this.element.style.userSelect = "none";
     }
 
-    addChild(node){
+    addChild(node) {
         this._children.push(node);
         this.element.appendChild(node.element);
     }
 
-    setSize(w, h){
+    setSize(w, h) {
         this.width = w;
         this.height = h;
     }
-    
-    setPosition(posX, posY){
+
+    setPosition(posX, posY) {
         this.x = posX;
         this.y = posY;
     }

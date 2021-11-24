@@ -1,10 +1,11 @@
 import { Node } from './Node.js';
 export class Cover extends Node {
-    constructor(){
+    constructor(width, height, color) {
         super();
-        this.setCoverColor("orange");
+        this.setCoverColor(color);
+        this.setSize(width, height);
     }
-    setCoverColor(color){
+    setCoverColor(color) {
         this.element.style.backgroundColor = color;
     }
 }
