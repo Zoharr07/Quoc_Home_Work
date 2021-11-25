@@ -8,12 +8,13 @@ export class Card extends Node {
         super();
         this._number = index;
         this._value = value;
-        this._cover;
-        this._label;
-        this._sprite;
+        this._cover = null;
+        this._label = null;
+        this._sprite = null;
+        this.isOpen = false;
         this.setSize(cardWidth, cardHeight);
         this.initCard(index, value);
-        this.showCover(true);
+        //this.showCover(true);
         this.showCard(true);
     }
     numberCard() {
@@ -44,8 +45,29 @@ export class Card extends Node {
         this.addChild(this._cover);
     }
 
-    showCover(isShow) {
-        this._cover.setActive(isShow)
+    flipOpen() {
+        this.isOpen = true;
+        let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
+        tl.to(this.element, { scaleX: 0, duration: 0.3 })
+            .add(() => {
+                this._cover.setActive(false)
+            })
+            .to(this.element, { scaleX: 1, duration: 0.3 })
+
+    }
+
+    flipClose() {
+
+        let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
+        tl.delay(0.8)
+            .to(this.element, { scaleX: 0, duration: 0.3 })
+            .add(() => {
+                this._cover.setActive(true)
+            })
+            .to(this.element, { scaleX: 1, duration: 0.3 })
+            .add(() => {
+                this.isOpen = false;
+            })
     }
 
     showCard(isShow) {
