@@ -1,11 +1,12 @@
 import { Node } from './Node.js';
 export class Cover extends Node {
-    constructor(width, height, color) {
+    constructor(width, height) {
         super();
-        this.setCoverColor(color);
+        this.setCoverColor("url('./img/backCard.jpeg')")
         this.setSize(width, height);
     }
     setCoverColor(color) {
-        this.element.style.backgroundColor = color;
+        this.element.style.backgroundImage = color;
+        this.element.style.backgroundSize = "contain"
     }
 }

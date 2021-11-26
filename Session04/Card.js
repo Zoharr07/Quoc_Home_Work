@@ -14,8 +14,8 @@ export class Card extends Node {
         this.isOpen = false;
         this.setSize(cardWidth, cardHeight);
         this.initCard(index, value);
-        //this.showCover(true);
-        this.showCard(true);
+        this.posX = 0;
+        this.posY = 0;
     }
     numberCard() {
         return this._number;
@@ -23,13 +23,10 @@ export class Card extends Node {
     valueCard() {
         return this._value;
     }
-    getCover() {
-        return this._cover;
-    }
 
     initCard(index, value) {
         this.element.id = "card" + index;
-
+        this.element.style.cursor = "pointer";
         this._sprite = new Sprite(this.width, this.height, "./img/" + value + ".jpeg");
         this._sprite.element.id = "sprite" + index;
 
@@ -37,7 +34,7 @@ export class Card extends Node {
         this._cover.element.id = "cover" + index;
 
         this._label = new Label(index);
-        this._label.setPosition(this.width / 2 - 5, this.height / 2 - 10)
+        this._label.setPosition(this.width / 2 - 7, this.height / 2 - 10)
         this._label.element.id = "label" + index;
 
         this._cover.addChild(this._label);
@@ -48,30 +45,30 @@ export class Card extends Node {
     flipOpen() {
         this.isOpen = true;
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
-        tl.to(this.element, { scaleX: 0, duration: 0.3 })
-            .add(() => {
-                this._cover.setActive(false)
-            })
-            .to(this.element, { scaleX: 1, duration: 0.3 })
-
+        tl.to(this.element, { scaleX: 0, duration: 0.2 })
+            .add(() => { this.showCover(false) })
+            .to(this.element, { scaleX: 1, duration: 0.2 })
     }
 
     flipClose() {
-
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
         tl.delay(0.8)
-            .to(this.element, { scaleX: 0, duration: 0.3 })
-            .add(() => {
-                this._cover.setActive(true)
-            })
-            .to(this.element, { scaleX: 1, duration: 0.3 })
-            .add(() => {
-                this.isOpen = false;
-            })
+            .to(this.element, { scaleX: 0, duration: 0.2 })
+            .add(() => { this.showCover(true) })
+            .to(this.element, { scaleX: 1, duration: 0.2 })
+            .add(() => { this.isOpen = false });
     }
 
-    showCard(isShow) {
-        this.setActive(isShow)
+    hideCard() {
+        this.element.zIndex = "1"
+        let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
+        tl.delay(0.6)
+            .fromTo(this.element, { scale: 1 }, { scale: 1.2, duration: 0.5 })
+            .add(() => { this.setActive(false) })
+            .fromTo(this.element, { scale: 1 }, { scale: 1 / 1.2, duration: 0.2 })
+    }
+    showCover(status) {
+        this._cover.setActive(status);
     }
 }
 

@@ -4,8 +4,9 @@ export class Label extends Node {
         super();
         this._string = string || "";
         this.string = this._string;
-        this.element.style.color = 'black';
+        this.element.style.color = 'white';
         this.element.style.fontSize = "x-large";
+        this.element.id = "scoreView";
         this.setSize(50, 50);
     }
 

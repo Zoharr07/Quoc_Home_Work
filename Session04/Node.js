@@ -42,14 +42,6 @@ export class Node {
         this.element.style.height = this._height + 'px';
     }
 
-    getActive() {
-        return this._active;
-    }
-    setActive(isActive) {
-        this._active = isActive;
-        if (isActive) this.element.style.display = "";
-        else this.element.style.display = "none";
-    }
     initElement() {
         this.element = document.createElement('div');
         this.setSize(this._width, this._height);
@@ -73,5 +65,14 @@ export class Node {
     setPosition(posX, posY) {
         this.x = posX;
         this.y = posY;
+    }
+
+    getActive() {
+        return this._active;
+    }
+    setActive(isActive) {
+        this._active = isActive;
+        if (isActive) this.element.style.display = "";
+        else this.element.style.display = "none";
     }
 }
