@@ -6,8 +6,8 @@ import { Sprite } from "./Sprite.js";
 export class Card extends Node {
     constructor(index, value, cardWidth, cardHeight) {
         super();
-        this._number = index;
-        this._value = value;
+        this._number = null;
+        this._value = null;
         this._cover = null;
         this._label = null;
         this._sprite = null;
@@ -25,9 +25,10 @@ export class Card extends Node {
     }
 
     initCard(index, value) {
+        this._number = index;
         this.element.id = "card" + index;
         this.element.style.cursor = "pointer";
-        this._sprite = new Sprite(this.width, this.height, "./img/" + value + ".jpeg");
+        this.changeValueCard(value)
         this._sprite.element.id = "sprite" + index;
 
         this._cover = new Cover(this.width, this.height, "orange");
@@ -42,6 +43,11 @@ export class Card extends Node {
         this.addChild(this._cover);
     }
 
+    changeValueCard(value){
+        this._value = value;
+        this._sprite = new Sprite(this.width, this.height, "./img/" + value + ".jpeg");
+    }
+
     flipOpen() {
         this.isOpen = true;
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
@@ -52,7 +58,7 @@ export class Card extends Node {
 
     flipClose() {
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
-        tl.delay(0.8)
+        tl.delay(1)
             .to(this.element, { scaleX: 0, duration: 0.2 })
             .add(() => { this.showCover(true) })
             .to(this.element, { scaleX: 1, duration: 0.2 })
@@ -64,12 +70,13 @@ export class Card extends Node {
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
         tl.delay(0.6)
             .fromTo(this.element, { scale: 1 }, { scale: 1.2, duration: 0.5 })
-            .add(() => { this.setActive(false) })
-            .fromTo(this.element, { scale: 1 }, { scale: 1 / 1.2, duration: 0.2 })
+            .add(() => { 
+                this.setActive(false);
+                tl.fromTo(this.element, { scale: 1.2 }, { scale: 1, duration: 0.2 })
+            })    
     }
+
     showCover(status) {
         this._cover.setActive(status);
     }
 }
-
-

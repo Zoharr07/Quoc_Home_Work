@@ -11,6 +11,8 @@ export class GameController extends Node {
         this._colum = 5;
         this._offsetX = 15;
         this._offsetY = 100;
+        this._centerX = this._colum * (this._cardWidth);
+        this._centerY = this._row * (this._cardWidth + this._offsetX);
 
         this._canClick = true;
         this._cardRemain = 0;
@@ -24,36 +26,46 @@ export class GameController extends Node {
     }
 
     initGame(gameStatus) {
-        this._scoreTotal = 10000;
+        this._scoreTotal = 1000;
         if (gameStatus === "new") {
-            this.cardValue = [];
-            this._cardLists = [];
             this._cardValue = this._initValueCard(10, 2);
-            //this._cards = this._shuffeCard(this._cardValue)
-            this.instanceBoardGame()
-            this._updateScore();
+            //this._cardValue = this._shuffeCard(this._cardValue);
+            if(this._cardLists.length == 0) this.instanceBoardGame();
+            else {
+                this.resetBoardGame();
+            }            
         }
         if (gameStatus === "replay") {
-            this.resetBoardGame()
+            this.resetBoardGame();
         }
+        this._distributeCards(this._cardLists);
+        this._updateScore();
     }
 
     instanceBoardGame() {
         let counter = 0
         for (let i = 0; i < this._row; i++) {
             for (let j = 0; j < this._colum; j++) {
-                let posX = this._offsetX + j * (this._cardWidth + this._offsetX);
-                let posY = this._offsetX + i * (this._cardHeight + this._offsetX);
-                let centerX = this._colum * (this._cardWidth);
-                let centerY = this._row * (this._cardWidth + this._offsetX);
-
                 let card = new Card(counter + 1, this._cardValue[counter], this._cardWidth, this._cardHeight);
                 card.element.addEventListener("mousedown", this._onClickCard.bind(this, card))
+                card.flipOpen();
                 this.addChild(card);
                 this._cardLists.push(card)
                 counter++;
+            }
+        }
+        this._cardRemain = this._cardLists.length;
+    }
 
-                card.setPosition(centerX / 2 - this._offsetX, centerY / 2)
+    _distributeCards(cardList){
+        let counter = 0;
+        for (let i = 0; i < this._row; i++) {
+            for (let j = 0; j < this._colum; j++) {
+                let posX = this._offsetX + j * (this._cardWidth + this._offsetX);
+                let posY = this._offsetX + i * (this._cardHeight + this._offsetX);
+                counter++;
+                let card = cardList[counter-1]
+                card.setPosition(this._centerX / 2 - this._offsetX, this._centerY / 2)
                 card.setActive(false)
                 card.isOpen = true;
 
@@ -61,23 +73,25 @@ export class GameController extends Node {
                 tl.delay(0.05 * counter)
                     .add(() => {
                         card.setActive(true);
+                        card.flipClose();
                     })
                     .to(card, { duration: 1, ease: "elastic.inOut(1.5, 1)", x: posX, y: posY }, 1)
                     .add(() => {
                         card.isOpen = false;
-                    });
+                    } );
             }
         }
-        this._cardRemain = (counter);
     }
+    
 
     resetBoardGame() {
-        for (let i = 0; i < this._row * this._colum; i++) {
+        for (let i = 0; i < this._cardLists.length; i++) {
             this._cardLists[i].element.zIndex = "0";
-            this._cardLists[i].flipClose();
+            this._cardLists[i].flipOpen();
             this._cardLists[i].setActive(true);
+            this._cardLists[i].changeValueCard(this._cardValue[i])
         }
-        this._canClick = true;
+        this._cardRemain = this._cardLists.length;
     }
 
     initGameBackground() {
@@ -95,10 +109,10 @@ export class GameController extends Node {
         this._scoreBoard.setSize(this._cardHeight * 1.5, this._cardWidth * (2.5 / 4))
         this._scoreBoard.setPosition(((this._colum - 4.5) * this._cardWidth) / 2, (this._offsetX + this._row * (this._cardHeight + this._offsetX)))
         this._scoreBoard.element.style.backgroundColor = "#ffbf00";
-        //this._scoreBoard.element.style.border = "1px solid black"
+        //this._scoreBoard.element.style.border = "1px solid black";
 
         this._scoreLabel = new Label();
-        this._scoreLabel.setPosition(this._cardWidth * 0.5, this._cardHeight / 7)
+        this._scoreLabel.setPosition(this._cardWidth * 0.5, this._cardHeight / 7);
         this._scoreLabel.setSize(250, 120);
         this._scoreLabel.element.innerHTML = "Score: " + this._scoreTotal;
         this._scoreBoard.addChild(this._scoreLabel);
@@ -111,13 +125,14 @@ export class GameController extends Node {
         this._playButton.element.addEventListener("mousedown", this._onStartGame.bind(this));
 
         this._replayButton = new Button("RePlay", (this._colum - 2.3) * this._cardWidth, this._offsetX * 1.5 + this._row * (this._cardHeight + this._offsetX));
-        this.addChild(this._replayButton)
+        this.addChild(this._replayButton);
         this._replayButton.element.addEventListener("mousedown", this._onReplayGame.bind(this));
         this._replayButton.hideButton();
     }
 
     _onStartGame() {
         this._playButton.hideButton();
+        this._replayButton.hideButton();
         this.initGame("new");
     }
     _onReplayGame() {
@@ -156,7 +171,7 @@ export class GameController extends Node {
             this._openedCard.hideCard();
             card.hideCard();
         } else {
-            this._updateScore(-500)
+            this._updateScore(-500);
             card.flipClose();
             this._openedCard.flipClose();
         }
@@ -184,6 +199,7 @@ export class GameController extends Node {
             return;
         }
         if (this._cardRemain <= 0) {
+            this._canClick = false;
             let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });
             tl.delay(1.2)
                 .add(() => {
@@ -193,7 +209,7 @@ export class GameController extends Node {
             return;
         }
         this._reset();
-    }
+    }        
 
     _reset() {
         let tl = gsap.timeline({ repeat: 0, repeatDelay: 0 });

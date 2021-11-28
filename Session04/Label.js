@@ -16,5 +16,6 @@ export class Label extends Node {
     set string(value) {
         this._string = value;
         this.element.innerHTML = this._string;
+        this.element.style.alignItems = "center";
     }
 }

@@ -7,6 +7,6 @@ export class Cover extends Node {
     }
     setCoverColor(color) {
         this.element.style.backgroundImage = color;
-        this.element.style.backgroundSize = "contain"
+        this.element.style.backgroundSize = "contain";
     }
 }
